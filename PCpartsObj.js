@@ -1,6 +1,11 @@
 const UserParts = function (buildName) {
-    this.buildName = buildName
+    this.buildName = buildName;
     this.parts = {};
+    this.listParts = () => {
+        for (const [key, value] of Object.entries(this.parts)) {
+            console.log(`${key}: ${value}`);
+        }
+    }
 }
 
 UserParts.prototype.addPart = function (hardware, name) {
