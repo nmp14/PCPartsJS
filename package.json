@@ -20,6 +20,7 @@
   "dependencies": {
     "csv-parser": "^3.0.0",
     "csv-writer": "^1.6.0",
-    "inquirer": "^7.3.3"
+    "inquirer": "^7.3.3",
+    "nanoid": "^3.1.20"
   }
 }
