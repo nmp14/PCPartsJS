@@ -1,3 +1,5 @@
+const ReadAndWrite = require("./readAndWrite");
+
 const UserParts = function (buildName) {
     this.buildName = buildName;
     this.parts = {};
