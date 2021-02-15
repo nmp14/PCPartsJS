@@ -1,9 +1,12 @@
 const ReadAndWrite = require("./readAndWrite");
 const inquirer = require("inquirer");
+const nanoid = require("nanoid");
 
 // Register
 const register = async () => {
     try {
+        const userInfo = {}
+
         const getUsername = () => {
             return inquirer.prompt([
                 {
@@ -38,6 +41,13 @@ const register = async () => {
             console.log("username must be bewteen 4 and 16 characters.");
             return;
         }
+        // Add username/password to userInfo Obj
+        userInfo.username = usernameAnswer.username;
+        userInfo.password = passwordAnswer.password;
+
+        // Generate uniqueID for user and add to userInfo obj
+        userInfo.uniqueID = nanoid();
+
     } catch (err) { console.log(err) }
 }
 
