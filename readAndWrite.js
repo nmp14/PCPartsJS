@@ -54,4 +54,4 @@ const ReadAndWrite = function () {
     }
 }
 
-module.exports.ReadAndWrite;
+module.exports = ReadAndWrite;
