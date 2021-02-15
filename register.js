@@ -46,7 +46,11 @@ const register = async () => {
         userInfo.password = passwordAnswer.password;
 
         // Generate uniqueID for user and add to userInfo obj
-        userInfo.uniqueID = nanoid();
+        userInfo.uniqueID = nanoid.nanoid();
+
+        // Write (append) to CSV file
+        const writer = new ReadAndWrite;
+        writer.writeCSVFile("./user_login_info/user-info.csv", "userInfo", [userInfo])
 
     } catch (err) { console.log(err) }
 }
