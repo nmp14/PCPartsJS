@@ -1,4 +1,4 @@
-const ReadAndWrite = require("./readAndWrite");
+const Writer = require("./Write");
 
 const UserParts = function (buildName) {
     this.buildName = buildName;
