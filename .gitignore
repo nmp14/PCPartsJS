@@ -6,3 +6,6 @@ node_modules/
 
 #ignore saved user info
 user_login_info/
+
+#ignore user builds
+user_builds/
