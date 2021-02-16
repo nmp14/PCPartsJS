@@ -42,11 +42,16 @@ const accessBuild = (id) => {
             message: "Which build would you like to access?"
         }
     ]).then(answer => {
-        // If user folder doesnt exist, 
-        if (!fs.existsSync(`./user_builds/${id}/`)) console.log("Cannot find any builds");
+        // If user folder doesnt exist, log error and reprompt choices.
+        if (!fs.existsSync(`./user_builds/${id}/`)) {
+            console.log("Cannot find any builds");
+            promptChoices();
+        }
         else {
+            //Check if build exists. If not, log error and reprompt choices.
             if (!fs.existsSync(`./user_builds/${id}/${answer.buildName}.csv`)) {
                 console.log("Can't find that build.");
+                promptChoices();
             } else {
                 console.log("Build found!\n\nAccessing now...\n");
             }
@@ -64,22 +69,30 @@ const buildMaker = (id) => {
     ]).then(async (answer) => {
         newBuild = new PCbuilder(answer.build)
     }).then(() => {
+        //Write new build to csv file.
         writeNewPCData(id);
     })
 }
-
+//Function for writing new build to csv file
 const writeNewPCData = (id) => {
     const write = new ReadandWrite;
+    // Check if user dir exists otherwise make it.
     if (!fs.existsSync(`./user_builds/${id}/`)) {
         fs.mkdirSync(`./user_builds/${id}/`)
     }
+    // Writes name of build to name column of csv file.
     const writeObj = { name: newBuild.buildName }
+    // Header for csv file.
     const header = [
         { id: 'name', title: 'Name' }
     ]
+    // If file for build doesnt exist, make it. Otherwise log exists and reprompt choices.
     if (!fs.existsSync(`./user_builds/${id}/${newBuild.buildName}.csv`)) {
         write.writeCSVFile(`./user_builds/${id}/${newBuild.buildName}.csv`, "pcCreate", [writeObj], header);
-    } else console.log("Build already exists!");
+    } else {
+        console.log("Build already exists!");
+        promptChoices();
+    }
 }
 
 module.exports = { mainFunction }
