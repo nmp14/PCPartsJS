@@ -1,5 +1,6 @@
 const inquirer = require("inquirer");
 const register = require("./register");
+const login = require("./login");
 
 const init = () => {
     inquirer.prompt([
@@ -14,7 +15,7 @@ const init = () => {
         if (answers.loginChoice === "Register") {
             register.readData();
         }
-        login.login();
+        login.getUserInfo();
     })
 }
 
