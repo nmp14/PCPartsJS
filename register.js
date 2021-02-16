@@ -37,7 +37,7 @@ const register = async () => {
 
         const passwordAnswer = await getPassword();
         // Make sure length of password is bettween 4 and 6
-        if (passwordAnswer.password.lengh < 4 || passwordAnswer.password.length > 16) {
+        if (passwordAnswer.password.length < 4 || passwordAnswer.password.length > 16) {
             console.log("username must be bewteen 4 and 16 characters.");
             return;
         }
