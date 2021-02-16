@@ -62,7 +62,7 @@ const compareLoginInfo = () => {
 
 const pendTransfer = () => {
     if (loginStatus) {
-        let dots = "."
+        let dots = ".."
         // Add some dots after login for fun.
         const interval = setInterval(() => {
             process.stdout.write(`${dots}\r`);

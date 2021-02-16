@@ -14,8 +14,9 @@ const init = () => {
         // If they choose register, call register function from register.js
         if (answers.loginChoice === "Register") {
             register.readData();
+        } else {
+            login.getUserInfo();
         }
-        login.getUserInfo();
     })
 }
 
