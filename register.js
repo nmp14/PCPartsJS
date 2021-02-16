@@ -31,14 +31,14 @@ const register = async () => {
         const usernameAnswer = await getUsername();
         // Make sure length of username is bettween 4 and 6
         if (usernameAnswer.username.length < 4 || usernameAnswer.username.length > 16) {
-            console.log("username must be bewteen 4 and 16 characters.");
+            console.log("Username must be bewteen 4 and 16 characters.");
             return;
         }
 
         const passwordAnswer = await getPassword();
         // Make sure length of password is bettween 4 and 6
         if (passwordAnswer.password.length < 4 || passwordAnswer.password.length > 16) {
-            console.log("username must be bewteen 4 and 16 characters.");
+            console.log("Password must be bewteen 4 and 16 characters.");
             return;
         }
         // Add username/password to userInfo Obj
