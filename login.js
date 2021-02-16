@@ -1,20 +1,25 @@
 const csv = require("csv-parser");
 const inquirer = require("inquirer");
 const fs = require("fs");
+const main = require("./main");
 
 const results = [];
 let usernameAnswer;
 let passwordAnswer;
 
+let uniqueID;
+
+let loginStatus = false;
+
 const getUserInfo = async () => {
     fs.createReadStream('./user_login_info/user-info.csv')
         .pipe(csv())
         .on('data', (data) => results.push(data))
-        .on('end', () => {
+        .on('end', async () => {
             //Call register function
-            login().then(() => {
-                compareLoginInfo();
-            });
+            await login()
+            await compareLoginInfo();
+            await transfer();
         });
 }
 
@@ -48,11 +53,18 @@ const compareLoginInfo = () => {
     for (obj of results) {
         if (obj.Username === usernameAnswer.username && obj.Password === passwordAnswer.password) {
             console.log("You've successfully logged in!");
+            uniqueID = obj.UniqueID;
+            loginStatus = true;
             return;
         }
     }
     console.log("Incorrect username or password");
 }
 
+const transfer = () => {
+    if (loginStatus) {
+        main.mainFunction(uniqueID);
+    }
+}
 
 module.exports = { getUserInfo }
