@@ -74,7 +74,7 @@ const buildMaker = (id) => {
     })
 }
 //Function for writing new build to csv file
-const writeNewPCData = (id) => {
+const writeNewPCData = async (id) => {
     const write = new ReadandWrite;
     // Check if user dir exists otherwise make it.
     if (!fs.existsSync(`./user_builds/${id}/`)) {
@@ -88,8 +88,9 @@ const writeNewPCData = (id) => {
     ]
     // If file for build doesnt exist, make it. Otherwise log exists and reprompt choices.
     if (!fs.existsSync(`./user_builds/${id}/${newBuild.buildName}.csv`)) {
-        write.writeCSVFile(`./user_builds/${id}/${newBuild.buildName}.csv`, "pcCreate", [writeObj], header);
-        promptChoices(id);
+        await write.writeCSVFile(`./user_builds/${id}/${newBuild.buildName}.csv`, "pcCreate", [writeObj], header)
+        //After writing, temporarily go back to choices as placeholder. Will later allow immediete access. Timer is bandaid for async stuff.
+        setTimeout(() => promptChoices(id), 500);
     } else {
         console.log("Build already exists!");
         promptChoices(id);
