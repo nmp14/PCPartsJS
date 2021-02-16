@@ -21,3 +21,5 @@ UserParts.prototype.removePart = function (hardware) {
     }
     console.log("Part wasn't found");
 }
+
+module.exports = UserParts
