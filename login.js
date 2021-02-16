@@ -19,7 +19,7 @@ const getUserInfo = async () => {
             //Call register function
             await login()
             await compareLoginInfo();
-            await transfer();
+            await pendTransfer();
         });
 }
 
@@ -52,7 +52,6 @@ const getPassword = () => {
 const compareLoginInfo = () => {
     for (obj of results) {
         if (obj.Username === usernameAnswer.username && obj.Password === passwordAnswer.password) {
-            console.log("You've successfully logged in!");
             uniqueID = obj.UniqueID;
             loginStatus = true;
             return;
@@ -61,10 +60,25 @@ const compareLoginInfo = () => {
     console.log("Incorrect username or password");
 }
 
-const transfer = () => {
+const pendTransfer = () => {
     if (loginStatus) {
-        main.mainFunction(uniqueID);
+        let dots = "."
+        // Add some dots after login for fun.
+        const interval = setInterval(() => {
+            process.stdout.write(`${dots}\r`);
+            dots += "."
+            if (dots === ".......") {
+                clearInterval(interval);
+                console.log("You've successfully logged in!");
+                transfer();
+            }
+        }, 1000)
     }
+}
+
+const transfer = () => {
+    console.log("-------\n");
+    main.mainFunction(uniqueID);
 }
 
 module.exports = { getUserInfo }
