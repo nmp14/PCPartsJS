@@ -72,7 +72,7 @@ const pendTransfer = () => {
                 console.log("You've successfully logged in!");
                 transfer();
             }
-        }, 1000)
+        }, 500)
     }
 }
 

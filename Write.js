@@ -4,7 +4,7 @@ const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const Writer = function () {
     //Function for generating CSV files. Will take in a path for where CSV should be written.
     //Usage will determine if it is for writting user info or pc info.
-    this.writeCSVFile = (path, usage, data) => {
+    this.writeCSVFile = (path, usage, data, ...header) => {
         try {
             let csvWriter;
             if (usage === "userInfo") {
@@ -15,18 +15,20 @@ const Writer = function () {
                         { id: 'password', title: 'Password' },
                         { id: 'uniqueID', title: 'UniqueID' },
                     ],
-                    //apend instead of write
+                    //append instead of write
                     append: true
                 });
-            } else if (usage === "pcInfo") {
+            } else if (usage === "pcCreate") {
+                header = header[0];
                 csvWriter = createCsvWriter({
                     path: path,
-                    header: [
-                        { id: 'name', title: 'Name' },
-                        { id: 'surname', title: 'Surname' },
-                        { id: 'age', title: 'Age' },
-                        { id: 'gender', title: 'Gender' },
-                    ]
+                    header: header
+                });
+            } else if (usage === "pcEdit") {
+                header = header[0];
+                csvWriter = createCsvWriter({
+                    path: path,
+                    header: header
                 });
             }
 
