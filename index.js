@@ -1,6 +1,5 @@
 const inquirer = require("inquirer");
 const register = require("./register");
-const csv = require("csv-parser");
 
 const init = () => {
     inquirer.prompt([
@@ -15,6 +14,7 @@ const init = () => {
         if (answers.loginChoice === "Register") {
             register.readData();
         }
+        login.login();
     })
 }
 
