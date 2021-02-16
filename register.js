@@ -1,13 +1,29 @@
 const ReadAndWrite = require("./readAndWrite");
 const inquirer = require("inquirer");
 const nanoid = require("nanoid");
+const csv = require('csv-parser')
+const fs = require('fs')
+
+const results = [];
+
+// Read current userInfo.
+const readData = async () => {
+    fs.createReadStream('./user_login_info/user-info.csv')
+        .pipe(csv())
+        .on('data', (data) => results.push(data))
+        .on('end', () => {
+            //Call register function
+            register();
+        });
+}
 
 // Register
 const register = async () => {
     try {
         const userInfo = {}
+        let usernameExists = false;
 
-        const getUsername = () => {
+        const getUsername = async () => {
             return inquirer.prompt([
                 {
                     name: "username",
@@ -17,7 +33,7 @@ const register = async () => {
             ])
         }
 
-        const getPassword = () => {
+        const getPassword = async () => {
             return inquirer.prompt([
                 {
                     name: "password",
@@ -45,14 +61,23 @@ const register = async () => {
         userInfo.username = usernameAnswer.username;
         userInfo.password = passwordAnswer.password;
 
+        // Check if username already exists.
+        results.forEach(obj => {
+            if (obj.Username === usernameAnswer.username) {
+                console.log("Username already exists!")
+                usernameExists = true;
+            }
+        })
+
         // Generate uniqueID for user and add to userInfo obj
         userInfo.uniqueID = nanoid.nanoid();
 
         // Write (append) to CSV file
-        const writer = new ReadAndWrite;
-        writer.writeCSVFile("./user_login_info/user-info.csv", "userInfo", [userInfo])
-
+        if (!usernameExists) {
+            const writer = new ReadAndWrite;
+            writer.writeCSVFile("./user_login_info/user-info.csv", "userInfo", [userInfo])
+        }
     } catch (err) { console.log(err) }
 }
 
-module.exports = { register };
+module.exports = { readData };
