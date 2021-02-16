@@ -1,4 +1,4 @@
-const ReadAndWrite = require("./readAndWrite");
+const Writer = require("./Write");
 const inquirer = require("inquirer");
 const nanoid = require("nanoid");
 const csv = require('csv-parser')
@@ -74,7 +74,7 @@ const register = async () => {
 
         // Write (append) to CSV file
         if (!usernameExists) {
-            const writer = new ReadAndWrite;
+            const writer = new Writer;
             writer.writeCSVFile("./user_login_info/user-info.csv", "userInfo", [userInfo])
         }
     } catch (err) { console.log(err) }
