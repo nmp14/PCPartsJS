@@ -45,13 +45,13 @@ const accessBuild = (id) => {
         // If user folder doesnt exist, log error and reprompt choices.
         if (!fs.existsSync(`./user_builds/${id}/`)) {
             console.log("Cannot find any builds");
-            promptChoices();
+            promptChoices(id);
         }
         else {
             //Check if build exists. If not, log error and reprompt choices.
             if (!fs.existsSync(`./user_builds/${id}/${answer.buildName}.csv`)) {
                 console.log("Can't find that build.");
-                promptChoices();
+                promptChoices(id);
             } else {
                 console.log("Build found!\n\nAccessing now...\n");
             }
@@ -89,9 +89,10 @@ const writeNewPCData = (id) => {
     // If file for build doesnt exist, make it. Otherwise log exists and reprompt choices.
     if (!fs.existsSync(`./user_builds/${id}/${newBuild.buildName}.csv`)) {
         write.writeCSVFile(`./user_builds/${id}/${newBuild.buildName}.csv`, "pcCreate", [writeObj], header);
+        promptChoices(id);
     } else {
         console.log("Build already exists!");
-        promptChoices();
+        promptChoices(id);
     }
 }
 
