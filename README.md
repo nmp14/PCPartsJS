@@ -8,3 +8,9 @@ A fun app (currently terminal based only) for testing file reading/writing as we
 - csv-parser
 - csv-writer
 - nanoid
+
+## Credits
+Nathan Peek
+
+## Usage
+node index.js
