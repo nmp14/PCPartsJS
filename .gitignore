@@ -9,3 +9,5 @@ user_login_info/
 
 #ignore user builds
 user_builds/
+
+.env
