@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS pc_parts_db;
+CREATE DATABASE pc_parts_db;
