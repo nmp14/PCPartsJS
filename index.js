@@ -13,7 +13,7 @@ const init = () => {
     ]).then(answers => {
         // If they choose register, call register function from register.js
         if (answers.loginChoice === "Register") {
-            register.readData();
+            register();
         } else {
             login.getUserInfo();
         }
