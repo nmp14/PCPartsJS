@@ -45,7 +45,7 @@ router.get("/login/:id", async (req, res) => {
 router.post("/", async (req, res) => {
     try {
         const body = req.body;
-        body.id = nanoid.nanoid(12);
+        body.id = nanoid.nanoid();
 
         const user = await User.create(body);
         res.status(201).json(user);
