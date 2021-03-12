@@ -8,13 +8,13 @@ router.get("/", (req, res) => {
     });
 });
 // Login
-router.get("/login/:id", async (req, res) => {
+router.get("/login", async (req, res) => {
     try {
-        const { password } = req.body;
+        const { username, password } = req.body;
 
         const userInfo = await User.findOne({
             where: {
-                id: req.params.id
+                username: username
             }
         });
 
@@ -28,7 +28,7 @@ router.get("/login/:id", async (req, res) => {
 
         // Check if valid password
         const validPass = await userInfo.passwordCheck(password);
-        if (!validPass) {
+        if (!validPass || userInfo.username !== username) {
             res.status(401).json({
                 message: "Incorrect username or password"
             });
