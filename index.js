@@ -15,7 +15,7 @@ const init = () => {
         if (answers.loginChoice === "Register") {
             register();
         } else {
-            login.getUserInfo();
+            login();
         }
     })
 }
