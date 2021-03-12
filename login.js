@@ -1,32 +1,33 @@
-const csv = require("csv-parser");
 const inquirer = require("inquirer");
-const fs = require("fs");
-const main = require("./main");
-
-const results = [];
-let usernameAnswer;
-let passwordAnswer;
-
-let uniqueID;
+const fetch = require("node-fetch");
+//const main = require("./main");
 
 let loginStatus = false;
-
-const getUserInfo = async () => {
-    fs.createReadStream('./user_login_info/user-info.csv')
-        .pipe(csv())
-        .on('data', (data) => results.push(data))
-        .on('end', async () => {
-            //Call register function
-            await login()
-            await compareLoginInfo();
-            await pendTransfer();
-        });
-}
 
 const login = async () => {
     // Get user input for username and password
     usernameAnswer = await getUsername();
     passwordAnswer = await getPassword();
+
+    const body = {
+        username: usernameAnswer.username,
+        password: passwordAnswer.password
+    }
+
+    const results = await fetch(`http://localhost:8000/api/users/login`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: { "Content-Type": "application/json" }
+    })
+    const resultJSON = await results.json();
+    // If status === 401 (bad authentication) or 500 (internal server error) log message and return.
+    if (results.status === 401 || results.status === 500) {
+        console.log(resultJSON.message);
+        return;
+    }
+    // If successful login
+    loginStatus = true;
+    pendTransfer(resultJSON.admin);
 }
 
 const getUsername = () => {
@@ -49,18 +50,8 @@ const getPassword = () => {
     ])
 }
 
-const compareLoginInfo = () => {
-    for (obj of results) {
-        if (obj.Username === usernameAnswer.username && obj.Password === passwordAnswer.password) {
-            uniqueID = obj.UniqueID;
-            loginStatus = true;
-            return;
-        }
-    }
-    console.log("Incorrect username or password");
-}
 
-const pendTransfer = () => {
+const pendTransfer = (user) => {
     if (loginStatus) {
         let dots = ".."
         // Add some dots after login for fun.
@@ -70,15 +61,16 @@ const pendTransfer = () => {
             if (dots === ".......") {
                 clearInterval(interval);
                 console.log("You've successfully logged in!");
-                transfer();
+                transfer(user);
             }
         }, 500)
     }
 }
 
-const transfer = () => {
+const transfer = (user) => {
     console.log("-------\n");
-    main.mainFunction(uniqueID);
+    //main(user);
 }
 
-module.exports = { getUserInfo }
+
+module.exports = login;
