@@ -1,7 +1,5 @@
 const PCbuilder = require("./PCpartsObj");
 const inquirer = require("inquirer");
-const fs = require("fs");
-const ReadandWrite = require("./Write");
 
 //PC build
 let newBuild;
