@@ -45,6 +45,7 @@ const getPassword = () => {
     return inquirer.prompt([
         {
             name: "password",
+            type: "password",
             message: "Enter password (6-16 characters): "
         }
     ])
