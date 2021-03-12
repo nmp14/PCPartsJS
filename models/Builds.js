@@ -1,4 +1,5 @@
 const { Model, DataTypes } = require("sequelize");
+const sequelize = require('../config/connection');
 
 class Build extends Model { }
 
@@ -21,14 +22,12 @@ Build.init(
                 key: "id"
             }
         }
-    },
-    {
-        sequelize,
-        timestamps: false,
-        freezeTableName: true,
-        underscored: true,
-        modelName: "build"
-    }
-)
+    }, {
+    sequelize,
+    timestamps: false,
+    freezeTableName: true,
+    underscored: true,
+    modelName: "build"
+})
 
 module.exports = Build;
