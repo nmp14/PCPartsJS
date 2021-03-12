@@ -1,9 +1,11 @@
-const UserParts = function (buildName) {
-    this.buildName = buildName;
-    this.parts = {};
-    this.listParts = () => {
-        for (const [key, value] of Object.entries(this.parts)) {
-            console.log(`${key}: ${value}`);
+class UserParts {
+    constructor(buildName) {
+        this.buildName = buildName;
+        this.parts = {};
+        this.listParts = () => {
+            for (const [key, value] of Object.entries(this.parts)) {
+                console.log(`${key}: ${value}`);
+            }
         }
     }
 }
