@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
 const fetch = require("node-fetch");
-//const main = require("./main");
+const main = require("./main");
 
 let loginStatus = false;
 
@@ -27,7 +27,7 @@ const login = async () => {
     }
     // If successful login
     loginStatus = true;
-    pendTransfer(resultJSON.admin);
+    pendTransfer(resultJSON.user);
 }
 
 const getUsername = () => {
@@ -69,7 +69,7 @@ const pendTransfer = (user) => {
 
 const transfer = (user) => {
     console.log("-------\n");
-    //main(user);
+    main(user);
 }
 
 
