@@ -47,8 +47,8 @@ router.post("/", async (req, res) => {
         const body = req.body;
         body.id = nanoid.nanoid();
 
-        const user = await User.create(body);
-        res.status(201).json(user);
+        const newUser = await User.create(body);
+        res.status(201).json(newUser);
     } catch (e) {
         res.status(500).json(e);
     }
