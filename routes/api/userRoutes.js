@@ -8,7 +8,7 @@ router.get("/", (req, res) => {
     });
 });
 // Login
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
     try {
         const { username, password } = req.body;
 
@@ -20,8 +20,8 @@ router.get("/login", async (req, res) => {
 
         // Check if not found.
         if (!userInfo) {
-            res.status(404).json({
-                message: "User not founds"
+            res.status(401).json({
+                message: "Incorrect username or password"
             });
             return;
         }
