@@ -1,37 +1,55 @@
 const PCbuilder = require("./PCpartsObj");
 const inquirer = require("inquirer");
+const fetch = require("node-fetch");
 
 //PC build
 let newBuild;
+// userInfo after logging in
+let user;
 
-const mainFunction = async (id) => {
-    await promptChoices(id);
+const mainFunction = async (userInfo) => {
+    user = userInfo;
+    await promptChoices();
 }
 // Prompt user for choices once logged on. User can check existing builds, access existing build, or make a new build.
-const promptChoices = (id) => {
+const promptChoices = () => {
     inquirer.prompt([
         {
             name: "userOptions",
             type: "list",
             message: "Would you like to check existing builds, access an old build, or make a new build?",
-            choices: ["Check builds", "Access build", "Make build"]
+            choices: ["Check builds", "Access build", "Make build", "Quit"]
         }
     ]).then(answer => {
         // Check their answer and call function based on it.
-        if (answer.userOptions === "Check builds") buildCheck(id);
-        else if (answer.userOptions === "Access build") accessBuild(id);
-        else if (answer.userOptions === "Make build") buildMaker(id);
+        if (answer.userOptions === "Check builds") buildCheck();
+        else if (answer.userOptions === "Access build") accessBuild();
+        else if (answer.userOptions === "Make build") buildMaker();
+        else if (answer.userOptions === "Quit") logOut();
     })
 }
+// Get all builds for user
+const buildCheck = async () => {
+    const fetchResults = await fetch(`http://localhost:8000/api/builds/checkAll/:${user.id}`);
 
-const buildCheck = (id) => {
-    if (!fs.existsSync(`./user_builds/${id}/`)) console.log("No builds found");
-    else {
-        // Access file in folder if it exists. List builds if any.
+    const fetchJSON = await fetchResults.json();
+
+    if (fetchResults.status === 404) console.log(fetchJSON.message);
+    if (fetchResults.status === 500) console.log(fetchJSON.message);
+    if (fetchResults.status === 200) {
+        if (fetchJSON.build.length === 0) {
+            console.log("No builds were found\n");
+        } else {
+            console.log(...fetchJSON.build);
+        }
     }
+
+    // Go back to main choices.
+    promptChoices();
 }
+
 //Access an old build
-const accessBuild = (id) => {
+const accessBuild = () => {
     // Asks for name of old build.
     inquirer.prompt([
         {
@@ -40,24 +58,11 @@ const accessBuild = (id) => {
             message: "Which build would you like to access?"
         }
     ]).then(answer => {
-        // If user folder doesnt exist, log error and reprompt choices.
-        if (!fs.existsSync(`./user_builds/${id}/`)) {
-            console.log("Cannot find any builds");
-            promptChoices(id);
-        }
-        else {
-            //Check if build exists. If not, log error and reprompt choices.
-            if (!fs.existsSync(`./user_builds/${id}/${answer.buildName}.csv`)) {
-                console.log("Can't find that build.");
-                promptChoices(id);
-            } else {
-                console.log("Build found!\n\nAccessing now...\n");
-            }
-        }
+
     })
 }
 //Makes a new build
-const buildMaker = (id) => {
+const buildMaker = () => {
     inquirer.prompt([
         {
             name: "build",
@@ -65,34 +70,13 @@ const buildMaker = (id) => {
             message: "What would you like to name your build?"
         }
     ]).then(async (answer) => {
-        newBuild = new PCbuilder(answer.build)
-    }).then(() => {
-        //Write new build to csv file.
-        writeNewPCData(id);
+        newBuild = new PCbuilder(answer.build);
+        console.log(newBuild);
     })
 }
-//Function for writing new build to csv file
-const writeNewPCData = async (id) => {
-    const write = new ReadandWrite;
-    // Check if user dir exists otherwise make it.
-    if (!fs.existsSync(`./user_builds/${id}/`)) {
-        fs.mkdirSync(`./user_builds/${id}/`)
-    }
-    // Writes name of build to name column of csv file.
-    const writeObj = { name: newBuild.buildName }
-    // Header for csv file.
-    const header = [
-        { id: 'name', title: 'Name' }
-    ]
-    // If file for build doesnt exist, make it. Otherwise log exists and reprompt choices.
-    if (!fs.existsSync(`./user_builds/${id}/${newBuild.buildName}.csv`)) {
-        await write.writeCSVFile(`./user_builds/${id}/${newBuild.buildName}.csv`, "pcCreate", [writeObj], header)
-        //After writing, temporarily go back to choices as placeholder. Will later allow immediete access. Timer is bandaid for async stuff.
-        setTimeout(() => promptChoices(id), 500);
-    } else {
-        console.log("Build already exists!");
-        promptChoices(id);
-    }
+
+const logOut = () => {
+    process.exit();
 }
 
-module.exports = { mainFunction }
+module.exports = mainFunction
