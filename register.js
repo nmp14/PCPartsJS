@@ -1,5 +1,6 @@
 const inquirer = require("inquirer");
 const nanoid = require("nanoid");
+const fetch = require("node-fetch");
 
 const register = async () => {
     // Get user input for username and password.
