@@ -13,21 +13,21 @@ const register = async () => {
     }
 
     //fetch
-    const fetchResults = fetch("http://localhost:8000/", {
+    const fetchResults = await fetch("http://localhost:8000/api/users", {
         method: "POST",
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' }
     })
-    const resultsJSON = await (await fetchResults).json();
+    const resultsJSON = await fetchResults.json();
 
     // Wrong password or something went wrong
     if (fetchResults.status === 401 || fetchResults.status === 500) {
-        console.log(`\n${resultsJSON.message}\n`);
+        console.log(resultsJSON.message);
         return false;
     }
 
     if (fetchResults.status === 201) {
-        loginStatus === true
+        console.log("\nYou have successfully registered!\n");
         return true;
     }
 }
@@ -45,7 +45,7 @@ const getPassword = () => {
     return inquirer.prompt([
         {
             name: "password",
-            message: "Enter password (4-16 characters): "
+            message: "Enter password (6-16 characters): "
         }
     ])
 }
